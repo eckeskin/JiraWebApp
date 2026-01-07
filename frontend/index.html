@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Test Manager</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Jira Test Manager</h1>
+            <p class="subtitle">Local Test Plan Management & Execution Analysis</p>
+        </header>
+
+        <!-- Status Bar -->
+        <div id="statusBar" class="status-bar">
+            <span id="statusMessage">Ready</span>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Test Plans Section -->
+            <section class="section">
+                <div class="section-header">
+                    <h2>Test Plans</h2>
+                    <button id="refreshPlansBtn" class="btn btn-secondary">Refresh</button>
+                </div>
+                <div id="testPlansContainer" class="test-plans-container">
+                    <div class="loading">Loading test plans...</div>
+                </div>
+            </section>
+
+            <!-- Test Execution Section -->
+            <section class="section" id="executionSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Test Execution Details</h2>
+                    <button id="closeExecutionBtn" class="btn btn-secondary">Close</button>
+                </div>
+
+                <!-- Execution Summary -->
+                <div id="executionSummary" class="execution-summary"></div>
+
+                <!-- Test Cases Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="all">All Tests</button>
+                    <button class="tab-btn" data-tab="failed">Failed Tests</button>
+                    <button class="tab-btn" data-tab="passed">Passed Tests</button>
+                </div>
+
+                <!-- Test Cases List -->
+                <div id="testCasesContainer" class="test-cases-container"></div>
+
+                <!-- Actions -->
+                <div class="actions-panel">
+                    <button id="exportFailedBtn" class="btn btn-primary">Export Failed Tests</button>
+                    <button id="copyFailedBtn" class="btn btn-secondary">Copy Failed IDs</button>
+                    <button id="addCommentBtn" class="btn btn-secondary">Add Jira Comment</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal for Comments -->
+        <div id="commentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add Comment to Test Execution</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <textarea id="commentText" class="comment-textarea" placeholder="Enter your comment..." rows="6"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button id="submitCommentBtn" class="btn btn-primary">Submit</button>
+                    <button id="cancelCommentBtn" class="btn btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Polling Status -->
+        <div id="pollingModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Waiting for Test Execution</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="polling-status">
+                        <div class="spinner"></div>
+                        <p id="pollingMessage">Jenkins is running tests. Polling for new test execution...</p>
+                        <p id="pollingTimer" class="polling-timer">Elapsed: 0s</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="stopPollingBtn" class="btn btn-secondary">Stop Polling</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
