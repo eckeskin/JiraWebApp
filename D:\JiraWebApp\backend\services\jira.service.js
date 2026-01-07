@@ -246,7 +246,7 @@ class JiraService {
       // customfield_10120 contains execution summary
       const xraySummary = fields.customfield_10120;
       if (xraySummary && xraySummary.statuses) {
-        logger.debug('Found Xray summary field (customfield_10120)');
+        logger.info('[PARSE] Found Xray summary field (customfield_10120)');
 
         // Extract statistics from Xray summary
         xraySummary.statuses.forEach((statusObj) => {
@@ -269,11 +269,12 @@ class JiraService {
       // GET DETAILED TEST RUNS FROM XRAY API
       // ========================================
 
-      logger.info(`Fetching detailed test runs for ${executionIssue.key} from Xray API...`);
+      logger.info(`[XRAY CALL] Fetching detailed test runs for ${executionIssue.key} from Xray API...`);
       const xrayTestRuns = await this.getXrayTestRuns(executionIssue.key);
+      logger.info(`[XRAY RESULT] Received ${xrayTestRuns?.length || 0} test runs from Xray API`);
 
       if (xrayTestRuns && xrayTestRuns.length > 0) {
-        logger.info(`Found ${xrayTestRuns.length} test runs with detailed status`);
+        logger.info(`[PARSE] Found ${xrayTestRuns.length} test runs with detailed status`);
 
         xrayTestRuns.forEach((testRun) => {
           const testCase = {
@@ -285,27 +286,14 @@ class JiraService {
           };
 
           result.testCases.push(testCase);
+          logger.info(`[PARSE] Added test: ${testCase.id} - ${testCase.status}`);
         });
       } else {
-        // Fallback: Try to get test keys from customfield_10115
-        logger.warn('Xray API returned no test runs, falling back to customfield_10115');
+        logger.warn('[PARSE] Xray API returned no test runs, using fallback strategy');
 
-        const testKeysField = fields.customfield_10115;
-        if (testKeysField && Array.isArray(testKeysField)) {
-          testKeysField.forEach((testRun) => {
-            result.testCases.push({
-              id: testRun.testKey || 'Unknown',
-              name: testRun.testKey || 'Unknown Test',
-              status: 'UNKNOWN',
-              message: 'Status not available from standard fields',
-              testRunId: testRun.testRunId,
-            });
-          });
-        }
-
-        // If still no test cases, create dummy entries based on summary
-        if (result.testCases.length === 0 && result.summary_stats.total > 0) {
-          logger.info('Creating test case entries from summary statistics');
+        // Create dummy entries from summary
+        if (result.summary_stats.total > 0) {
+          logger.info('[PARSE] Creating test case entries from summary statistics');
 
           // Create passed test entries
           for (let i = 0; i < result.summary_stats.passed; i++) {
@@ -339,11 +327,11 @@ class JiraService {
         }
       }
 
-      logger.info(`Parsed execution ${result.key}: ${result.testCases.length} test cases found`);
+      logger.info(`[PARSE DONE] Execution ${result.key}: ${result.testCases.length} test cases found`);
 
       return result;
     } catch (error) {
-      logger.error('Error parsing test execution results:', error);
+      logger.error('[PARSE ERROR] Error parsing test execution results:', error);
       throw new Error(`Failed to parse test execution results: ${error.message}`);
     }
   }
