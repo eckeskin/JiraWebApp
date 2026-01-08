@@ -175,10 +175,11 @@ body {
 }
 
 .summary-item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 140px 1fr 140px 160px 240px;
+    gap: 16px;
     align-items: center;
-    padding: 12px 16px;
+    padding: 14px 16px;
     border-bottom: 1px solid #f4f5f7;
     transition: background 0.2s;
 }
@@ -193,17 +194,18 @@ body {
 
 .summary-plan {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
 }
 
 .summary-plan-link {
-    font-weight: 600;
+    font-weight: 700;
     color: #0052cc;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
+    white-space: nowrap;
 }
 
 .summary-plan-link:hover {
@@ -213,27 +215,33 @@ body {
 
 .summary-plan-title {
     color: #172b4d;
-    font-size: 14px;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .summary-exec-wrapper {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
 }
 
 .summary-exec {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .summary-exec-key {
-    font-weight: 600;
+    font-weight: 700;
     color: #0052cc;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.2s;
+    white-space: nowrap;
 }
 
 .summary-exec-key:hover {
@@ -243,20 +251,25 @@ body {
 
 .summary-exec-date {
     color: #6b778c;
-    font-size: 13px;
+    font-size: 12px;
+    white-space: nowrap;
 }
 
 .summary-exec-stats {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .summary-stat {
     font-size: 13px;
-    font-weight: 600;
-    padding: 4px 8px;
+    font-weight: 700;
+    padding: 4px 10px;
     border-radius: 4px;
+    min-width: 50px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .summary-stat.total {
@@ -707,7 +720,7 @@ body {
         padding: 10px;
     }
 
-    .test-plans-container {
+    .test-plans-grid {
         grid-template-columns: 1fr;
     }
 
@@ -722,5 +735,21 @@ body {
     .modal-content {
         width: 95%;
         margin: 20px;
+    }
+
+    .summary-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .summary-exec-stats {
+        justify-content: flex-start;
+    }
+
+    .summary-plan-title {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
     }
 }
